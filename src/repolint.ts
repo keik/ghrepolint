@@ -2,8 +2,9 @@ import { Octokit } from "@octokit/rest";
 import debug from "debug";
 
 import { showReport } from "./reporter";
-import { requireTopics } from "./rules/require-topics";
+import { requireBranchProtection } from "./rules/require-branch-protection";
 import { requireCI } from "./rules/require-ci";
+import { requireTopics } from "./rules/require-topics";
 import { Repo } from "./types";
 
 const d = debug("keik:repolint");
@@ -49,6 +50,10 @@ main();
 
 const check = async (repo: Repo) => {
   d(`check repo: ${repo.name}`);
-  const checkers = [requireTopics, requireCI, requireCI].map((a) => a(octokit));
+  const checkers = [
+    requireBranchProtection,
+    requireCI,
+    requireTopics,
+  ].map((a) => a(octokit));
   await Promise.all(checkers.map((c) => c(repo)));
 };
