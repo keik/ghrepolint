@@ -43,7 +43,7 @@ const main = async () => {
   );
   // TODO: more parallelly
   await Promise.all(repos.map((a) => check(a)));
-  console.log(results);
+  console.log(results.map((a) => JSON.stringify(a)).join("\n"));
 };
 
 main();
