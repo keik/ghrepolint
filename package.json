@@ -1,0 +1,34 @@
+{
+  "name": "repolint",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keik/repolint.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/keik/repolint/issues"
+  },
+  "homepage": "https://github.com/keik/repolint#readme",
+  "dependencies": {
+    "@octokit/rest": "^17.5.1",
+    "chalk": "^4.0.0",
+    "debug": "^4.1.1",
+    "yargs": "^15.3.1"
+  },
+  "devDependencies": {
+    "@types/debug": "^4.1.5",
+    "@typescript-eslint/eslint-plugin": "^2.29.0",
+    "@typescript-eslint/parser": "^2.29.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-prettier": "^3.1.3",
+    "prettier": "^2.0.4",
+    "typescript": "^3.8.3"
+  }
+}
