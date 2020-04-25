@@ -7,9 +7,21 @@ describe("detectTargetType", () => {
   test("with `keik`", async () => {
     expect(await Utils.detectTargetType("keik")).toBe("user");
   });
+  test("with `keik/repolint`", async () => {
+    expect(await Utils.detectTargetType("keik/repolint")).toBe("repo");
+  });
+  test("with `keik/repo/lint`", async () => {
+    try {
+      await Utils.detectTargetType("keik/repo/lint");
+    } catch (e) {
+      expect(String(e)).toBe(String(new Error("target is invalid")));
+    }
+  });
   test("with `_`", async () => {
-    await expect(Utils.detectTargetType("_")).rejects.toThrow(
-      "target is not found"
-    );
+    try {
+      await Utils.detectTargetType("_");
+    } catch (e) {
+      expect(String(e)).toBe(String(new Error("target is not found")));
+    }
   });
 });

@@ -3,7 +3,8 @@ import octokit from "./octokit";
 type TargetType = "org" | "user" | "repo";
 
 export const detectTargetType = async (target: string): Promise<TargetType> => {
-  if (false) return "user";
+  if (target.match(/^[\w]+?\/[\w]+?$/)) return "repo";
+  if (!target.match(/^\w+$/)) throw new Error("target is invalid");
   try {
     await octokit.orgs.get({
       org: target,
