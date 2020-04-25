@@ -10,7 +10,7 @@ import * as Utils from "./utils";
 
 const d = debug("keik:repolint");
 
-const check = async (repo: Repository): void => {
+const check = async (repo: Repository): Promise<void> => {
   d(`check repo: ${repo.owner}/${repo.name}`);
   const checkers = [requireBranchProtection, requireCI, requireTopics];
   await Promise.all(checkers.map((c) => c(repo)));
@@ -22,7 +22,7 @@ export default async ({
 }: {
   target: string;
   verbose?: boolean;
-}): void => {
+}): Promise<void> => {
   if (verbose)
     console.log(chalk.cyan(`start repolint to target: ${target}...`));
   const repos = await Utils.getRepositoriesFromTarget(target);

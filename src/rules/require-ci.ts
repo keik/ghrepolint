@@ -4,7 +4,7 @@ import * as Utils from "../utils";
 
 const RULE_NAME = "require-ci";
 
-export const requireCI = async (repo: Repository): void => {
+export const requireCI = async (repo: Repository): Promise<void> => {
   // TODO: configurable
   const opts = { path: ".circleci/config.yml" };
   try {

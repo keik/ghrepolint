@@ -4,7 +4,7 @@ import * as Utils from "../utils";
 
 const RULE_NAME = "require-topics";
 
-export const requireTopics = async (repo: Repository): void => {
+export const requireTopics = async (repo: Repository): Promise<void> => {
   // TODO: configurable
   const opts = { required: true };
   const rawTopics = await Utils.getTopics(repo);
