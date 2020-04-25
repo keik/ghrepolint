@@ -9,19 +9,14 @@ import { Repo } from "./types";
 
 const d = debug("keik:repolint");
 
-// parameterize
-const opts = {
-  org: "github",
-};
-
 const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
 });
 
 // Compare: https://developer.github.com/v3/repos/#list-organization-repositories
-const main = async () => {
+export default async (params: { org: string }) => {
   const { data: rawRepos } = await octokit.repos.listForOrg({
-    org: opts.org,
+    org: params.org,
     per_page: 3, // TODO: 100 as maximum
   });
   // TODO: use paginate to target all repository
@@ -45,8 +40,6 @@ const main = async () => {
 
   showReport();
 };
-
-main();
 
 const check = async (repo: Repo) => {
   d(`check repo: ${repo.name}`);
