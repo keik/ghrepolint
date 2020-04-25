@@ -1,18 +1,15 @@
 import { Octokit } from "@octokit/rest";
 
+import * as Utils from "../utils";
 import { report } from "../reporter";
-import { Repo } from "../types";
+import { Repository } from "../types";
 
 const RULE_NAME = "require-topics";
 
-export const requireTopics = (octokit: Octokit) => async (repo: Repo) => {
+export const requireTopics = async (repo: Repository) => {
   // TODO: configurable
   const opts = { required: true };
-  const { data: rawTopics } = await octokit.repos.getAllTopics({
-    owner: repo.owner,
-    repo: repo.name,
-  });
-
+  const rawTopics = await Utils.getTopics(repo);
   const topics = rawTopics.names;
   if (opts.required && topics.length === 0) {
     report({

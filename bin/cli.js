@@ -4,7 +4,9 @@ const repolint = require("../src/repolint").default;
 const yargs = require("yargs");
 
 const argv = yargs
-  .usage("Lint for repository governance.\n\nUsage: repolint [options]")
+  .usage(
+    "Lint for repository governance.\n\nUsage: repolint [options] <target>"
+  )
   .help("help")
   .alias("help", "h")
   .options({
@@ -13,16 +15,10 @@ const argv = yargs
       description: "Run with verbose logs",
       required: false,
     },
-    org: {
-      description: "Target repository owner orgs.",
-      requiresArg: true,
-      required: true,
-    },
-  }).argv;
+  })
+  .demandCommand(1, 1).argv;
 
-(async () => {
-  repolint({
-    org: argv.org,
-    verbose: argv.verbose,
-  });
-})();
+repolint({
+  target: argv._[0],
+  verbose: argv.verbose,
+});

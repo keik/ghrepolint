@@ -1,19 +1,16 @@
 import { Octokit } from "@octokit/rest";
 
+import * as Utils from "../utils";
 import { report } from "../reporter";
-import { Repo } from "../types";
+import { Repository } from "../types";
 
 const RULE_NAME = "require-ci";
 
-export const requireCI = (octokit: Octokit) => async (repo: Repo) => {
+export const requireCI = async (repo: Repository) => {
   // TODO: configurable
   const opts = { path: ".circleci/config.yml" };
   try {
-    const { data: rawContent } = await octokit.repos.getContents({
-      owner: repo.owner,
-      repo: repo.name,
-      path: opts.path,
-    });
+    const rawContent = await Utils.getContents(repo, opts.path);
 
     if (Array.isArray(rawContent)) throw new Error("directory exists.");
 

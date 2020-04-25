@@ -1,13 +1,13 @@
 import { Octokit } from "@octokit/rest";
 
+import * as Utils from "../utils";
+
 import { report } from "../reporter";
-import { Repo } from "../types";
+import { Repository } from "../types";
 
 const RULE_NAME = "require-branch-protection";
 
-export const requireBranchProtection = (octokit: Octokit) => async (
-  repo: Repo
-) => {
+export const requireBranchProtection = async (repo: Repository) => {
   const opts = {
     required: {
       required_status_checks: {
@@ -23,13 +23,7 @@ export const requireBranchProtection = (octokit: Octokit) => async (
     },
   };
   try {
-    const {
-      data: rawBranchProtection,
-    } = await octokit.repos.getBranchProtection({
-      owner: repo.owner,
-      repo: repo.name,
-      branch: repo.default_branch,
-    });
+    const { data: rawBranchProtection } = await Utils.getBranchProtection(repo);
     if (opts.required.required_status_checks) {
       if (opts.required.required_status_checks.contexts) {
         opts.required.required_status_checks.contexts.forEach((a) => {
@@ -63,7 +57,7 @@ export const requireBranchProtection = (octokit: Octokit) => async (
     report({
       rule: RULE_NAME,
       repo: repo.name,
-      message: `Branch protection is not exist. (default branch: ${repo.default_branch})`,
+      message: `Branch protection is not exist. (default branch: ${repo.defaultBranch})`,
     });
   }
 };

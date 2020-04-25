@@ -1,27 +1,23 @@
 import * as Utils from "./utils";
 
-describe("detectTargetType", () => {
-  test("with `github`", async () => {
-    expect(await Utils.detectTargetType("github")).toBe("org");
+describe("getRepositoriesFromTarget", () => {
+  test("with `eslint` org", async () => {
+    expect(
+      (await Utils.getRepositoriesFromTarget("eslint")).find(
+        (a) => a.fullName === "eslint/eslint"
+      )
+    ).toBeTruthy();
   });
-  test("with `keik`", async () => {
-    expect(await Utils.detectTargetType("keik")).toBe("user");
+  test("with `keik` user", async () => {
+    expect(
+      (await Utils.getRepositoriesFromTarget("keik")).find(
+        (a) => a.fullName === "keik/repolint"
+      )
+    ).toBeTruthy();
   });
   test("with `keik/repolint`", async () => {
-    expect(await Utils.detectTargetType("keik/repolint")).toBe("repo");
-  });
-  test("with `keik/repo/lint`", async () => {
-    try {
-      await Utils.detectTargetType("keik/repo/lint");
-    } catch (e) {
-      expect(String(e)).toBe(String(new Error("target is invalid")));
-    }
-  });
-  test("with `_`", async () => {
-    try {
-      await Utils.detectTargetType("_");
-    } catch (e) {
-      expect(String(e)).toBe(String(new Error("target is not found")));
-    }
+    expect(
+      (await Utils.getRepositoriesFromTarget("keik/repolint"))[0].fullName
+    ).toBe("keik/repolint");
   });
 });
