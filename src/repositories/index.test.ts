@@ -1,23 +1,24 @@
-import * as Utils from "./utils";
+import * as Repositories from ".";
 
 describe("getRepositoriesFromTarget", () => {
   test("with `eslint` org", async () => {
     expect(
-      (await Utils.getRepositoriesFromTarget("eslint")).find(
+      (await Repositories.getRepositoriesFromTarget("eslint")).find(
         (a) => a.fullName === "eslint/eslint"
       )
     ).toBeTruthy();
   });
   test("with `keik` user", async () => {
     expect(
-      (await Utils.getRepositoriesFromTarget("keik")).find(
+      (await Repositories.getRepositoriesFromTarget("keik")).find(
         (a) => a.fullName === "keik/repolint"
       )
     ).toBeTruthy();
   });
   test("with `keik/repolint`", async () => {
     expect(
-      (await Utils.getRepositoriesFromTarget("keik/repolint"))[0].fullName
+      (await Repositories.getRepositoriesFromTarget("keik/repolint"))[0]
+        .fullName
     ).toBe("keik/repolint");
   });
 });

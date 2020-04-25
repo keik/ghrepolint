@@ -2,11 +2,11 @@ import chalk from "chalk";
 import debug from "debug";
 
 import { showReport } from "./reporter";
+import * as Repositories from "./repositories";
 import { requireBranchProtection } from "./rules/require-branch-protection";
 import { requireCI } from "./rules/require-ci";
 import { requireTopics } from "./rules/require-topics";
 import { Repository } from "./types";
-import * as Utils from "./utils";
 
 const d = debug("keik:repolint");
 
@@ -25,7 +25,7 @@ export default async ({
 }): Promise<void> => {
   if (verbose)
     console.log(chalk.cyan(`start repolint to target: ${target}...`));
-  const repos = await Utils.getRepositoriesFromTarget(target);
+  const repos = await Repositories.getRepositoriesFromTarget(target);
 
   if (verbose)
     console.log(chalk.cyan(`target repositories count: ${repos.length}`));

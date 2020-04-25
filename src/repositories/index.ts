@@ -1,10 +1,17 @@
-import octokit from "./octokit";
-import { Repository } from "./types";
+import { Octokit } from "@octokit/rest";
+
+import { Repository } from "../types";
+
+type RawRepository = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+const octokit = new Octokit({
+  auth: process.env.GITHUB_TOKEN,
+});
 
 export const getRepositoriesFromTarget = async (
   target: string
 ): Promise<Array<Repository>> => {
-  let rawRepos: Array<any>;
+  let rawRepos: Array<RawRepository>;
 
   let m;
   if ((m = target.match(/^(?<owner>[\w]+?)\/(?<repo>[\w]+?)$/)) && m.groups) {
@@ -22,7 +29,7 @@ export const getRepositoriesFromTarget = async (
   }
 
   return rawRepos.map(
-    (a: any): Repository => {
+    (a: RawRepository): Repository => {
       return {
         defaultBranch: a.default_branch,
         fullName: a.full_name,

@@ -1,6 +1,6 @@
 import { report } from "../reporter";
+import * as Repositories from "../repositories";
 import { Repository } from "../types";
-import * as Utils from "../utils";
 
 const RULE_NAME = "require-ci";
 
@@ -8,7 +8,7 @@ export const requireCI = async (repo: Repository): Promise<void> => {
   // TODO: configurable
   const opts = { path: ".circleci/config.yml" };
   try {
-    const rawContent = await Utils.getContents(repo, opts.path);
+    const rawContent = await Repositories.getContents(repo, opts.path);
 
     if (Array.isArray(rawContent)) throw new Error("directory exists.");
 

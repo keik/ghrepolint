@@ -1,8 +1,8 @@
 import debug from "debug";
 
 import { report } from "../reporter";
+import * as Repositories from "../repositories";
 import { Repository } from "../types";
-import * as Utils from "../utils";
 
 const d = debug("keik:repolint");
 
@@ -24,7 +24,9 @@ export const requireBranchProtection = async (repo: Repository) => {
     },
   };
   try {
-    const { data: rawBranchProtection } = await Utils.getBranchProtection(repo);
+    const {
+      data: rawBranchProtection,
+    } = await Repositories.getBranchProtection(repo);
     if (opts.required.required_status_checks) {
       if (opts.required.required_status_checks.contexts) {
         opts.required.required_status_checks.contexts.forEach((a) => {
