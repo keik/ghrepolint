@@ -1,9 +1,10 @@
-import { Octokit } from "@octokit/rest";
-
-import * as Utils from "../utils";
+import debug from "debug";
 
 import { report } from "../reporter";
 import { Repository } from "../types";
+import * as Utils from "../utils";
+
+const d = debug("keik:repolint");
 
 const RULE_NAME = "require-branch-protection";
 

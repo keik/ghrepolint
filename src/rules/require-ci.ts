@@ -1,12 +1,10 @@
-import { Octokit } from "@octokit/rest";
-
-import * as Utils from "../utils";
 import { report } from "../reporter";
 import { Repository } from "../types";
+import * as Utils from "../utils";
 
 const RULE_NAME = "require-ci";
 
-export const requireCI = async (repo: Repository) => {
+export const requireCI = async (repo: Repository): void => {
   // TODO: configurable
   const opts = { path: ".circleci/config.yml" };
   try {

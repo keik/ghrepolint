@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-const repolint = require("../src/repolint").default;
 const yargs = require("yargs");
+
+const repolint = require("../src/repolint").default;
 
 const argv = yargs
   .usage(

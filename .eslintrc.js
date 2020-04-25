@@ -9,6 +9,8 @@ module.exports = {
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:import/errors",
+    "plugin:import/typescript",
 
     // put prettier at last to disable invalid rules.
     "plugin:prettier/recommended",
@@ -16,5 +18,12 @@ module.exports = {
   ],
   rules: {
     // "@typescript-eslint/camelcase": 0,
+    "import/order": [
+      "error",
+      {
+        alphabetize: { order: "asc" },
+        "newlines-between": "always",
+      },
+    ],
   },
 };
