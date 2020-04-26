@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+const fs = require("fs");
+const path = require("path");
+
 const yargs = require("yargs");
 
 const repolint = require("../src/repolint").default;
@@ -19,7 +22,11 @@ const argv = yargs
   })
   .demandCommand(1, 1).argv;
 
+const configPath = path.join(process.cwd(), ".repolintrc.js");
+const config = fs.existsSync(configPath) ? require(configPath) : {};
+
 repolint({
   target: argv._[0],
+  config: config,
   verbose: argv.verbose,
 });

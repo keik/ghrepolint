@@ -1,14 +1,17 @@
 import { report } from "../reporter";
 import * as Repositories from "../repositories";
-import { Repository } from "../types";
+import { Context, Rule } from "../types";
 
-export default {
+const rule: Rule = {
   name: "require-ci",
-  checker: async function (repo: Repository): Promise<void> {
+  checker: async function (ctx: Context): Promise<void> {
     // TODO: configurable
     const opts = { path: ".circleci/config.yml" };
     try {
-      const rawContent = await Repositories.getContents(repo, opts.path);
+      const rawContent = await Repositories.getContents(
+        ctx.repository,
+        opts.path
+      );
 
       if (Array.isArray(rawContent)) throw new Error("directory exists.");
 
@@ -17,9 +20,11 @@ export default {
     } catch (e) {
       report({
         rule: this.name,
-        repo: repo.name,
+        repo: ctx.repository.name,
         message: `CI settings ${opts.path} is not exist.`,
       });
     }
   },
 };
+
+export default rule;

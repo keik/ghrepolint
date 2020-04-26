@@ -1,66 +1,45 @@
 import { report } from "../reporter";
 import * as Repositories from "../repositories";
-import { Repository } from "../types";
+import { BranchProtection, Context, Rule } from "../types";
 
-export const RULE_NAME = "require-branch-protection";
-
-export default {
+const rule: Rule = {
   name: "require-branch-protection",
-  checker: async function (repo: Repository): Promise<void> {
-    const opts = {
-      required: {
-        required_status_checks: {
-          contexts: [
-            "ci/circleci: rspec",
-            "ci/circleci: test_js",
-            "ci/circleci: eslint_flow",
-            "ci/circleci: danger",
-            "danger/danger",
-          ],
-        },
-        required_pull_request_reviews: { require_code_owner_reviews: true },
-      },
-    };
-
+  checker: async function (ctx: Context): Promise<void> {
+    let branchProtection: BranchProtection | null = null;
     try {
-      const {
-        data: rawBranchProtection,
-      } = await Repositories.getBranchProtection(repo);
-      if (opts.required.required_status_checks) {
-        if (opts.required.required_status_checks.contexts) {
-          opts.required.required_status_checks.contexts.forEach((a) => {
-            if (
-              !rawBranchProtection.required_status_checks.contexts.includes(a)
-            ) {
-              report({
-                rule: this.name,
-                repo: repo.name,
-                message: `Required status checks '${a}' is not exist.`,
-              });
-            }
-          });
-        }
-      }
-      if (opts.required.required_pull_request_reviews) {
-        if (
-          opts.required.required_pull_request_reviews
-            .require_code_owner_reviews &&
-          !rawBranchProtection.required_pull_request_reviews
-            .require_code_owner_reviews
-        ) {
-          report({
-            rule: this.name,
-            repo: repo.name,
-            message: `Pull request reviews are required.`,
-          });
-        }
-      }
+      branchProtection = await Repositories.getBranchProtection(ctx.repository);
     } catch (e) {
       report({
         rule: this.name,
-        repo: repo.name,
-        message: `Branch protection is not exist. (default branch: ${repo.defaultBranch})`,
+        repo: ctx.repository.name,
+        message: `Branch protection is not exist. (default branch: ${ctx.repository.defaultBranch})`,
+      });
+      return;
+    }
+
+    if (ctx.ruleConfig.requireStatusChecks) {
+      ctx.ruleConfig.requireStatusChecks.forEach((a: string) => {
+        if (!branchProtection?.requiredStatusChecks.includes(a)) {
+          report({
+            rule: this.name,
+            repo: ctx.repository.name,
+            message: `Required status checks '${a}' is not exist.`,
+          });
+        }
+      });
+    }
+
+    if (
+      ctx.ruleConfig.requireCodeOwnerReview &&
+      !branchProtection?.requireCodeOwnerReviews
+    ) {
+      report({
+        rule: this.name,
+        repo: ctx.repository.name,
+        message: `Pull request reviews are required.`,
       });
     }
   },
 };
+
+export default rule;

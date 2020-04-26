@@ -1,20 +1,19 @@
 import { report } from "../reporter";
 import * as Repositories from "../repositories";
-import { Repository } from "../types";
+import { Context, Rule } from "../types";
 
-export default {
+const rule: Rule = {
   name: "require-topics",
-  checker: async function (repo: Repository): Promise<void> {
-    // TODO: configurable
-    const opts = { required: true };
-    const rawTopics = await Repositories.getTopics(repo);
-    const topics = rawTopics.names;
-    if (opts.required && topics.length === 0) {
+  checker: async function (ctx: Context): Promise<void> {
+    const topics = await Repositories.getTopics(ctx.repository);
+    if (topics.length === 0) {
       report({
         rule: this.name,
-        repo: repo.name,
+        repo: ctx.repository.name,
         message: "topics are not set.",
       });
     }
   },
 };
+
+export default rule;

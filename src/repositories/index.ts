@@ -1,6 +1,6 @@
 import { Octokit } from "@octokit/rest";
 
-import { Repository } from "../types";
+import { BranchProtection, Repository } from "../types";
 
 type RawRepository = any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
@@ -41,15 +41,27 @@ export const getRepositoriesFromTarget = async (
   );
 };
 
-// TOOD: wrap
-export const getBranchProtection = async (repo: Repository) => {
-  const x = await octokit.repos.getBranchProtection({
-    owner: repo.owner,
-    repo: repo.name,
-    branch: repo.defaultBranch,
-  });
+export const getBranchProtection = async (
+  repo: Repository
+): Promise<BranchProtection> => {
+  const { data: rawBranchProtection } = await octokit.repos.getBranchProtection(
+    {
+      owner: repo.owner,
+      repo: repo.name,
+      branch: repo.defaultBranch,
+    }
+  );
 
-  return x;
+  const requireCodeOwnerReviews =
+    rawBranchProtection.required_pull_request_reviews
+      .require_code_owner_reviews;
+  const requiredStatusChecks =
+    rawBranchProtection.required_status_checks.contexts;
+
+  return {
+    requireCodeOwnerReviews,
+    requiredStatusChecks,
+  };
 };
 
 // TOOD: wrap
@@ -62,11 +74,10 @@ export const getContents = async (repo: Repository, path: string) => {
   return rawContent;
 };
 
-// TOOD: wrap
-export const getTopics = async (repo: Repository) => {
+export const getTopics = async (repo: Repository): Promise<Array<string>> => {
   const { data: rawTopics } = await octokit.repos.getAllTopics({
     owner: repo.owner,
     repo: repo.name,
   });
-  return rawTopics;
+  return rawTopics.names;
 };

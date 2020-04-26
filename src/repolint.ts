@@ -3,39 +3,45 @@ import debug from "debug";
 
 import { showReport } from "./reporter";
 import * as Repositories from "./repositories";
-import requireBranchProtection from "./rules/require-branch-protection";
-import requireCI from "./rules/require-ci";
-import requireTopics from "./rules/require-topics";
-import { Repository } from "./types";
-
-const d = debug("keik:repolint");
-
-const check = async (repo: Repository): Promise<void> => {
-  d(`check repo: ${repo.owner}/${repo.name}`);
-  const rules = [requireBranchProtection, requireCI, requireTopics];
-  await Promise.all(
-    rules.map((rule) => {
-      debug(`keik:repolint:${rule.name}`)(`start ${repo.owner}/${repo.name}`);
-      return rule.checker(repo);
-    })
-  );
-};
+import Rules from "./rules";
+import { Config, Rule } from "./types";
 
 export default async ({
   target,
+  config,
   verbose,
 }: {
   target: string;
+  config: Config;
   verbose?: boolean;
 }): Promise<void> => {
   if (verbose)
     console.log(chalk.cyan(`start repolint to target: ${target}...`));
+
   const repos = await Repositories.getRepositoriesFromTarget(target);
 
   if (verbose)
     console.log(chalk.cyan(`target repositories count: ${repos.length}`));
 
-  await Promise.all(repos.map((a) => check(a)));
+  const rules = Object.keys(config.rules).map(
+    (a) => (Rules as { [key: string]: Rule })[a]
+  );
+
+  await Promise.all(
+    repos.map(async (repo) => {
+      await Promise.all(
+        rules.map((rule) => {
+          debug(`keik:repolint:${rule.name}`)(
+            `start check: ${repo.owner}/${repo.name}`
+          );
+          return rule.checker({
+            repository: repo,
+            ruleConfig: config.rules[rule.name],
+          });
+        })
+      );
+    })
+  );
 
   showReport();
 };
