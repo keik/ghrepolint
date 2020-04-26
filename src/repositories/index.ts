@@ -64,14 +64,24 @@ export const getBranchProtection = async (
   };
 };
 
-// TOOD: wrap
-export const getContents = async (repo: Repository, path: string) => {
-  const { data: rawContent } = await octokit.repos.getContents({
-    owner: repo.owner,
-    repo: repo.name,
-    path: path,
+export const getContents = async ({
+  filepath,
+  repositoryName,
+  repositoryOwner,
+}: {
+  filepath: string;
+  repositoryName: string;
+  repositoryOwner: string;
+}): Promise<string> => {
+  const { data: rawContents } = await octokit.repos.getContents({
+    owner: repositoryOwner,
+    repo: repositoryName,
+    path: filepath,
   });
-  return rawContent;
+  if (Array.isArray(rawContents))
+    throw new Error("Directory exits, not a file");
+
+  return Buffer.from(rawContents.content ?? "", "base64").toString();
 };
 
 export const getTopics = async (repo: Repository): Promise<Array<string>> => {

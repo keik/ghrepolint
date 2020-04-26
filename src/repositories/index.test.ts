@@ -22,3 +22,33 @@ describe("getRepositoriesFromTarget", () => {
     ).toBe("keik/repolint");
   });
 });
+
+describe("getContents", () => {
+  test("of `README.md` from `keik/repolint`", async () => {
+    expect(
+      await Repositories.getContents({
+        filepath: "README.md",
+        repositoryOwner: "keik",
+        repositoryName: "repolint",
+      })
+    ).toMatch("repolint");
+  });
+  test("of `src` from `keik/repolint`", async () => {
+    await expect(
+      Repositories.getContents({
+        filepath: "src",
+        repositoryOwner: "keik",
+        repositoryName: "repolint",
+      })
+    ).rejects.toThrow("Directory exits, not a file");
+  });
+  test("of `_` from `keik/repolint`", async () => {
+    await expect(
+      Repositories.getContents({
+        filepath: "_",
+        repositoryOwner: "keik",
+        repositoryName: "repolint",
+      })
+    ).rejects.toThrow("Not Found");
+  });
+});

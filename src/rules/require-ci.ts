@@ -8,12 +8,11 @@ const rule: Rule = {
     // TODO: configurable
     const opts = { path: ".circleci/config.yml" };
     try {
-      const rawContent = await Repositories.getContents(
-        ctx.repository,
-        opts.path
-      );
-
-      if (Array.isArray(rawContent)) throw new Error("directory exists.");
+      const contents = await Repositories.getContents({
+        filepath: opts.path,
+        repositoryName: ctx.repository.name,
+        repositoryOwner: ctx.repository.owner,
+      });
 
       // TODO: Lint YAML contents
       // const content = Buffer.from(rawContent.content ?? "", "base64").toString();
