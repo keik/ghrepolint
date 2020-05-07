@@ -13,6 +13,7 @@ module.exports = {
     "require-ci": {
       configFilepath: "./circleci/config.yml",
     },
+    "require-codeowners": true,
     "require-topics": true,
   },
 };
