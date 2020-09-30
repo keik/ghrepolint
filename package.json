@@ -36,7 +36,6 @@
   ],
   "homepage": "https://github.com/keik/repolint#readme",
   "license": "MIT",
-  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/keik/repolint.git"
