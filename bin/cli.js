@@ -5,7 +5,7 @@ const path = require("path");
 
 const yargs = require("yargs");
 
-const repolint = require("../src/repolint").default;
+const repolint = require("../lib/repolint").default;
 
 const argv = yargs
   .usage(

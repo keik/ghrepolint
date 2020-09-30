@@ -12,13 +12,17 @@ To target private repository set your GitHub API Token to environment variable `
 
 # development
 
-Run source.
+## Build with watch and run
 
 ```
-npx ts-node bin/cli.js --org github
+npm run watch
 ```
 
-Run tests.
+```
+bin/cli.js --org github
+```
+
+## Test
 
 ```
 npm t
