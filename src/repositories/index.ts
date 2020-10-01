@@ -73,7 +73,7 @@ export const getContents = async ({
   repositoryName: string;
   repositoryOwner: string;
 }): Promise<string> => {
-  const { data: rawContents } = await octokit.repos.getContents({
+  const { data: rawContents } = await octokit.repos.getContent({
     owner: repositoryOwner,
     repo: repositoryName,
     path: filepath,

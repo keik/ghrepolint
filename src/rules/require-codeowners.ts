@@ -1,5 +1,4 @@
 import { report } from "../reporter";
-
 import * as Repositories from "../repositories";
 import { Context, Rule } from "../types";
 
