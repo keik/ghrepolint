@@ -3,6 +3,9 @@
   "description": "Lint for repository governance",
   "version": "0.0.0",
   "author": "keik",
+  "bin": {
+    "ghrepolint": "bin/cli.js"
+  },
   "bugs": {
     "url": "https://github.com/keik/ghrepolint/issues"
   },
