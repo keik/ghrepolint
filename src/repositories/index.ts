@@ -14,13 +14,13 @@ export const getRepositoriesFromTarget = async (
   let rawRepos: Array<RawRepository>;
 
   let m;
-  if ((m = target.match(/^(?<owner>[\w]+?)\/(?<repo>[\w]+?)$/)) && m.groups) {
+  if ((m = target.match(/^(?<owner>[\w-]+?)\/(?<repo>[\w-]+?)$/)) && m.groups) {
     const { data } = await octokit.repos.get({
       owner: m.groups.owner,
       repo: m.groups.repo,
     });
     rawRepos = [data];
-  } else if (!target.match(/^\w+$/)) {
+  } else if (!target.match(/^[\w-]+$/)) {
     throw new Error("target is invalid");
   } else {
     rawRepos = await octokit.paginate(octokit.repos.listForUser, {
