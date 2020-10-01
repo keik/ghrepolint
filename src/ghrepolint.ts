@@ -16,7 +16,7 @@ export default async ({
   verbose?: boolean;
 }): Promise<void> => {
   if (verbose)
-    console.log(chalk.cyan(`start repolint to target: ${target}...`));
+    console.log(chalk.cyan(`start ghrepolint to target: ${target}...`));
 
   const repos = await Repositories.getRepositoriesFromTarget(target);
 
@@ -31,7 +31,7 @@ export default async ({
     repos.map(async (repo) => {
       await Promise.all(
         rules.map((rule) => {
-          debug(`keik:repolint:${rule.name}`)(
+          debug(`keik:ghrepolint:${rule.name}`)(
             `start check: ${repo.owner}/${repo.name}`
           );
           return rule.checker({

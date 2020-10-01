@@ -11,43 +11,43 @@ describe("getRepositoriesFromTarget", () => {
   test("with `keik` user", async () => {
     expect(
       (await Repositories.getRepositoriesFromTarget("keik")).find(
-        (a) => a.fullName === "keik/repolint"
+        (a) => a.fullName === "keik/ghrepolint"
       )
     ).toBeTruthy();
   });
-  test("with `keik/repolint`", async () => {
+  test("with `keik/ghrepolint`", async () => {
     expect(
-      (await Repositories.getRepositoriesFromTarget("keik/repolint"))[0]
+      (await Repositories.getRepositoriesFromTarget("keik/ghrepolint"))[0]
         .fullName
-    ).toBe("keik/repolint");
+    ).toBe("keik/ghrepolint");
   });
 });
 
 describe("getContents", () => {
-  test("of `README.md` from `keik/repolint`", async () => {
+  test("of `README.md` from `keik/ghrepolint`", async () => {
     expect(
       await Repositories.getContents({
         filepath: "README.md",
         repositoryOwner: "keik",
-        repositoryName: "repolint",
+        repositoryName: "ghrepolint",
       })
-    ).toMatch("repolint");
+    ).toMatch("ghrepolint");
   });
-  test("of `src` from `keik/repolint`", async () => {
+  test("of `src` from `keik/ghrepolint`", async () => {
     await expect(
       Repositories.getContents({
         filepath: "src",
         repositoryOwner: "keik",
-        repositoryName: "repolint",
+        repositoryName: "ghrepolint",
       })
     ).rejects.toThrow("Directory exits, not a file");
   });
-  test("of `_` from `keik/repolint`", async () => {
+  test("of `_` from `keik/ghrepolint`", async () => {
     await expect(
       Repositories.getContents({
         filepath: "_",
         repositoryOwner: "keik",
-        repositoryName: "repolint",
+        repositoryName: "ghrepolint",
       })
     ).rejects.toThrow("Not Found");
   });

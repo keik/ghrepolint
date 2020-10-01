@@ -1,11 +1,11 @@
-# repolint
+# ghrepolint
 
-Lint for repository governance.
+Lint for GitHub Repository governance.
 
 # usage
 
 ```
-npx repolint -h
+npx ghrepolint -h
 ```
 
 To target private repository set your GitHub API Token to environment variable `GITHUB_TOKEN`.

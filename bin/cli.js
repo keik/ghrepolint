@@ -5,11 +5,11 @@ const path = require("path");
 
 const yargs = require("yargs");
 
-const repolint = require("../lib/repolint").default;
+const ghrepolint = require("../lib/ghrepolint").default;
 
 const argv = yargs
   .usage(
-    "Lint for repository governance.\n\nUsage: repolint [options] <target>"
+    "Lint for repository governance.\n\nUsage: ghrepolint [options] <target>"
   )
   .help("help")
   .alias("help", "h")
@@ -27,11 +27,11 @@ const argv = yargs
     },
   })
   .example(
-    "repolint github --rule 'require-branch-protection: { \"requireCodeOwnerReviews\": true }'"
+    "ghrepolint github --rule 'require-branch-protection: { \"requireCodeOwnerReviews\": true }'"
   )
   .demandCommand(1, 1).argv;
 
-const configPath = path.join(process.cwd(), ".repolintrc.js");
+const configPath = path.join(process.cwd(), ".ghrepolintrc.js");
 const config = fs.existsSync(configPath) ? require(configPath) : {};
 
 const rulesFromConfig = config.rules;
@@ -51,7 +51,7 @@ const rulesFromArgv = (Array.isArray(argv.rule)
   }
 }, {});
 
-repolint({
+ghrepolint({
   target: argv._[0],
   config: { ...config, rules: { ...rulesFromConfig, ...rulesFromArgv } },
   verbose: argv.verbose,
