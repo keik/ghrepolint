@@ -22,7 +22,9 @@ const argv = yargs
   })
   .options({
     rule: {
+      array: true,
       description: "Specify rule.",
+      default: [],
       required: false,
     },
   })
@@ -35,10 +37,7 @@ const configPath = path.join(process.cwd(), ".ghrepolintrc.js");
 const config = fs.existsSync(configPath) ? require(configPath) : {};
 
 const rulesFromConfig = config.rules;
-const rulesFromArgv = (Array.isArray(argv.rule)
-  ? argv.rule
-  : [argv.rule]
-).reduce((acc, ruleString) => {
+const rulesFromArgv = argv.rule.reduce((acc, ruleString) => {
   try {
     const { name, value } = ruleString.match(
       "^(?<name>.+?):(?<value>.+)$"
