@@ -23,9 +23,15 @@ export const getRepositoriesFromTarget = async (
   } else if (!target.match(/^[\w-]+$/)) {
     throw new Error("target is invalid");
   } else {
-    rawRepos = await octokit.paginate(octokit.repos.listForUser, {
-      username: target,
-    });
+    try {
+      rawRepos = await octokit.paginate(octokit.repos.listForOrg, {
+        org: target,
+      });
+    } catch (e) {
+      rawRepos = await octokit.paginate(octokit.repos.listForUser, {
+        username: target,
+      });
+    }
   }
 
   return rawRepos.map(

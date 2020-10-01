@@ -19,7 +19,6 @@ export default async ({
     console.log(chalk.cyan(`start ghrepolint to target: ${target}...`));
 
   const repos = await Repositories.getRepositoriesFromTarget(target);
-
   if (verbose)
     console.log(chalk.cyan(`target repositories count: ${repos.length}`));
 
